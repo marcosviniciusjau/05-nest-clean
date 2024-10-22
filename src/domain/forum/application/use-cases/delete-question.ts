@@ -8,7 +8,7 @@ interface DeleteQuestionUseCaseRequest {
 }
 type DeleteQuestionUseCaseResponse = Either<
   NotFoundError | NotAllowedError,
-  object
+  null
 >
 export class DeleteQuestionUseCase {
   constructor(private questionsRepos: QuestionsRepos) {}
@@ -24,6 +24,6 @@ export class DeleteQuestionUseCase {
       return left(new NotAllowedError())
     }
     await this.questionsRepos.delete(question)
-    return right({})
+    return right(null)
   }
 }
