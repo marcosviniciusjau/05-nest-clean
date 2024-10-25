@@ -2,8 +2,8 @@ import { AnswersRepos } from '../repos/answer-repos'
 import { Question } from '../../enterprise/entities/question'
 import { QuestionsRepos } from '../repos/question-repos'
 import { Either, left, right } from '@/core/either'
-import { NotFoundError } from './errors/not-found-error'
-import { NotAllowedError } from './errors/not-allowed-error'
+import { NotFoundError } from '@/core/errors/errors/not-found-error'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
 interface ChooseBestAnswerRequest {
   authorId: string

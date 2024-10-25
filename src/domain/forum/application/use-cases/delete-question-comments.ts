@@ -1,7 +1,7 @@
 import { Either, left, right } from '@/core/either'
 import { QuestionCommentsRepos } from '../repos/question-comment-repos'
-import { NotAllowedError } from './errors/not-allowed-error'
-import { NotFoundError } from './errors/not-found-error'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { NotFoundError } from '@/core/errors/errors/not-found-error'
 
 interface DeleteQuestionCommentUseCaseRequest {
   authorId: string
