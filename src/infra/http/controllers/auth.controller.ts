@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   HttpCode,
@@ -6,11 +7,11 @@ import {
   UnauthorizedException,
   UsePipes,
 } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
-import { compare } from 'bcryptjs'
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { PrismaService } from '@/infra/database/prisma/prisma-service'
+import { AuthStudentUseCase } from '@/domain/forum/application/use-cases/auth-student'
 import { z } from 'zod'
+import { WrongCredentials } from '@/domain/forum/application/use-cases/errors/wrong-credentials'
+import { Public } from '@/infra/auth/public'
 const authBodySchema = z.object({
   email: z.string().email(),
   password: z.string(),
@@ -18,32 +19,32 @@ const authBodySchema = z.object({
 
 type AuthBodySchema = z.infer<typeof authBodySchema>
 @Controller('/sessions')
+@Public()
 export class AuthController {
-  constructor(
-    private jwt: JwtService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private authStudent: AuthStudentUseCase) {}
 
   @Post()
   @HttpCode(201)
   @UsePipes(new ZodValidationPipe(authBodySchema))
   async handle(@Body() body: AuthBodySchema) {
     const { email, password } = body
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email,
-      },
+    const result = await this.authStudent.execute({
+      email,
+      password,
     })
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials')
+    if (result.isLeft()) {
+      const error = result.value
+
+      switch (error.constructor) {
+        case WrongCredentials:
+          throw new UnauthorizedException(error.message)
+        default:
+          throw new BadRequestException(error.message)
+      }
     }
 
-    const isValid = await compare(password, user.password)
-    if (!isValid) {
-      throw new UnauthorizedException('Invalid credentials')
-    }
+    const { token } = result.value
 
-    const token = this.jwt.sign({ sub: user.id })
     return {
       token,
     }
