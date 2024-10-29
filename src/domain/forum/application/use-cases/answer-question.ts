@@ -6,8 +6,8 @@ import { AnswerAttachment } from '../../enterprise/entities/answer-attachment'
 import { AnswerAttachmentList } from '../../enterprise/entities/answer-attachment-list'
 
 interface AnswerAnswerUseCaseRequest {
-  instructorId: string
-  answerId: string
+  authorId: string
+  questionId: string
   attachmentsIds: string[]
   content: string
 }
@@ -17,19 +17,19 @@ type AnswerAnswerUseCaseResponse = Either<
     answer: Answer
   }
 >
-export class AnswerAnswerUseCase {
+export class AnswerQuestionUseCase {
   constructor(private answersRepo: AnswersRepos) {}
 
   async execute({
-    instructorId,
-    answerId,
+    authorId,
+    questionId,
     content,
     attachmentsIds,
   }: AnswerAnswerUseCaseRequest): Promise<AnswerAnswerUseCaseResponse> {
     const answer = Answer.create({
       content,
-      authorId: new UniqueEntityID(instructorId),
-      questionId: new UniqueEntityID(answerId),
+      authorId: new UniqueEntityID(authorId),
+      questionId: new UniqueEntityID(questionId),
     })
 
     const answerAttachments = attachmentsIds.map((attachmentId) =>
