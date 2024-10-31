@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma-service'
 import { StudentRepos } from '@/domain/forum/application/repos/student-repos'
 import { Student } from '@/domain/forum/enterprise/entities/student'
 import { PrismaStudentMapper } from '../mappers/prisma-student-mapper'
+
 @Injectable()
 export class PrismaStudentRepos implements StudentRepos {
   constructor(private prisma: PrismaService) {}

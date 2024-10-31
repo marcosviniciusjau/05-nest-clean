@@ -4,6 +4,7 @@ import { QuestionsRepos } from '../repos/question-repos'
 import { Either, left, right } from '@/core/either'
 import { NotFoundError } from '@/core/errors/errors/not-found-error'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
+import { Injectable } from '@nestjs/common'
 
 interface ChooseBestAnswerRequest {
   authorId: string
@@ -16,7 +17,7 @@ type ChooseBestAnswerResponse = Either<
     question: Question
   }
 >
-
+@Injectable()
 export class ChooseBestAnswerUseCase {
   constructor(
     private questionRepos: QuestionsRepos,

@@ -4,6 +4,7 @@ import { QuestionComment } from '../../enterprise/entities/question-comment'
 import { QuestionCommentsRepos } from '../repos/question-comment-repos'
 import { Either, left, right } from '@/core/either'
 import { NotFoundError } from '@/core/errors/errors/not-found-error'
+import { Injectable } from '@nestjs/common'
 interface CommentQuestionUseCaseRequest {
   authorId: string
   questionId: string
@@ -16,6 +17,7 @@ type CommentQuestionUseCaseResponse = Either<
     questionComment: QuestionComment
   }
 >
+@Injectable()
 export class CommentQuestionUseCase {
   constructor(
     private questionsRepos: QuestionsRepos,
