@@ -5,9 +5,14 @@ import { Injectable } from '@nestjs/common'
 
 import { PrismaService } from '../prisma-service'
 import { PrismaAnswerMapper } from '../mappers/prisma-answer-mapper'
+import { AnswerAttachmentRepos } from '@/domain/forum/application/repos/answer-attachment-repos'
 @Injectable()
 export class PrismaAnswersRepos implements AnswersRepos {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private answerAttachmentRepos: AnswerAttachmentRepos,
+  ) {}
+
   async findByQuestionId(
     questionId: string,
     { page }: PaginationParams,
@@ -53,11 +58,18 @@ export class PrismaAnswersRepos implements AnswersRepos {
   async save(answer: Answer): Promise<void> {
     const data = PrismaAnswerMapper.toPrisma(answer)
 
-    await this.prisma.answer.update({
-      where: {
-        id: data.id,
-      },
-      data,
-    })
+    await Promise.all([
+      this.prisma.answer.update({
+        where: {
+          id: data.id,
+        },
+        data,
+      }),
+      this.answerAttachmentRepos.createMany(answer.attachments.getNewItems()),
+
+      this.answerAttachmentRepos.deleteMany(
+        answer.attachments.getRemovedItems(),
+      ),
+    ])
   }
 }

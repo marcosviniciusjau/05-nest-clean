@@ -9,6 +9,7 @@ import { CreateQuestionUseCase } from '@/domain/forum/application/use-cases/crea
 const createQuestionSchema = z.object({
   title: z.string(),
   content: z.string(),
+  attachments: z.array(z.string().uuid()),
 })
 
 const bodyValidation = new ZodValidationPipe(createQuestionSchema)
@@ -23,13 +24,13 @@ export class CreateQuestionController {
     body: CreateQuestionSchema,
     @CurrentUser() user: TokenSchema,
   ) {
-    const { title, content } = body
+    const { title, content, attachments } = body
     const { sub: userId } = user
     const result = await this.createQuestionUseCase.execute({
       authorId: userId,
       title,
       content,
-      attachmentsIds: [],
+      attachmentsIds: attachments,
     })
 
     if (result.isLeft()) {

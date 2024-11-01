@@ -4,10 +4,15 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma-service'
 import { PrismaQuestionMapper } from '../mappers/prisma-question-mapper'
 import { PaginationParams } from '@/core/repos/pagination-params'
+import { QuestionAttachmentsRepos } from '@/domain/forum/application/repos/question-attachments-repos'
 
 @Injectable()
 export class PrismaQuestionsRepos implements QuestionsRepos {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private questionAttachmentRepos: QuestionAttachmentsRepos,
+  ) {}
+
   async findById(id: string): Promise<Question | null> {
     const question = await this.prisma.question.findUnique({
       where: { id },
@@ -48,17 +53,30 @@ export class PrismaQuestionsRepos implements QuestionsRepos {
     await this.prisma.question.create({
       data,
     })
+    await this.questionAttachmentRepos.createMany(
+      question.attachments.getNewItems(),
+    )
   }
 
   async save(question: Question): Promise<void> {
     const data = PrismaQuestionMapper.toPrisma(question)
 
-    await this.prisma.question.update({
-      where: {
-        id: data.id,
-      },
-      data,
-    })
+    await Promise.all([
+      this.prisma.question.update({
+        where: {
+          id: data.id,
+        },
+        data,
+      }),
+
+      this.questionAttachmentRepos.createMany(
+        question.attachments.getNewItems(),
+      ),
+
+      this.questionAttachmentRepos.deleteMany(
+        question.attachments.getRemovedItems(),
+      ),
+    ])
   }
 
   async delete(question: Question): Promise<void> {
