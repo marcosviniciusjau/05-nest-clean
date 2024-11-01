@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { Student } from '../../enterprise/entities/student'
 import { StudentRepos } from '../repos/student-repos'
 import { HashGenerator } from '../cryptography/hash-generator'
-import { StudentExists } from './errors/studentExists'
+import { StudentExists } from './errors/student-exists'
 interface RegisterStudentUseCaseRequest {
   name: string
   email: string

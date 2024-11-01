@@ -12,6 +12,9 @@
     "paths": {
       "@/*": ["./src/*"]
      },     
+     "types":[
+      "multer",
+     ],
     "incremental": true,
     "skipLibCheck": true,
     "strict":true,

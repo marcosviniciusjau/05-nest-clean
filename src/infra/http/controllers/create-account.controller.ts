@@ -11,7 +11,7 @@ import {
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { z } from 'zod'
 import { RegisterStudentUseCase } from '@/domain/forum/application/use-cases/register-student'
-import { StudentExists } from '@/domain/forum/application/use-cases/errors/studentExists'
+import { StudentExists } from '@/domain/forum/application/use-cases/errors/student-exists'
 import { Public } from '@/infra/auth/public'
 
 const createAccountSchema = z.object({
