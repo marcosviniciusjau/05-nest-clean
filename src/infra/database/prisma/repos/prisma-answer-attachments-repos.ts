@@ -1,11 +1,11 @@
-import { AnswerAttachmentRepos } from '@/domain/forum/application/repos/answer-attachment-repos'
+import { AnswerAttachmentsRepos } from '@/domain/forum/application/repos/answer-attachment-repos'
 import { AnswerAttachment } from '@/domain/forum/enterprise/entities/answer-attachment'
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma-service'
 import { PrismaAnswerAttachmentMapper } from '../mappers/prisma-answer-attachment-mapper'
 
 @Injectable()
-export class PrismaAnswerAttachmentRepos implements AnswerAttachmentRepos {
+export class PrismaAnswerAttachmentsRepos implements AnswerAttachmentsRepos {
   constructor(private prisma: PrismaService) {}
   async createMany(attachments: AnswerAttachment[]): Promise<void> {
     if (attachments.length === 0) {

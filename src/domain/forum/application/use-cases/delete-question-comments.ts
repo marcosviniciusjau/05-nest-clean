@@ -1,5 +1,5 @@
 import { Either, left, right } from '@/core/either'
-import { QuestionCommentsRepos } from '../repos/question-comment-repos'
+import { QuestionCommentsRepos } from '../repos/question-comments-repos'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { NotFoundError } from '@/core/errors/errors/not-found-error'
 import { Injectable } from '@nestjs/common'

@@ -1,32 +1,34 @@
+import { QuestionCommentsRepos } from '@/domain/forum/application/repos/question-comments-repos'
 import { Either, right } from '@/core/either'
-import { QuestionComment } from '../../enterprise/entities/question-comment'
-import { QuestionCommentsRepos } from '../repos/question-comment-repos'
 import { Injectable } from '@nestjs/common'
+import { CommentWithAuthor } from '../../enterprise/entities/value-objects/comment-with-author'
+
 interface ListQuestionCommentsUseCaseRequest {
   questionId: string
   page: number
 }
+
 type ListQuestionCommentsUseCaseResponse = Either<
   null,
   {
-    questionComments: QuestionComment[]
+    comments: CommentWithAuthor[]
   }
 >
+
 @Injectable()
 export class ListQuestionCommentsUseCase {
   constructor(private questionCommentsRepos: QuestionCommentsRepos) {}
+
   async execute({
-    page,
     questionId,
+    page,
   }: ListQuestionCommentsUseCaseRequest): Promise<ListQuestionCommentsUseCaseResponse> {
-    const questionComments = await this.questionCommentsRepos.findByQuestionId(
-      questionId,
-      {
+    const comments =
+      await this.questionCommentsRepos.findByQuestionIdWithAuthor(questionId, {
         page,
-      },
-    )
+      })
     return right({
-      questionComments,
+      comments,
     })
   }
 }

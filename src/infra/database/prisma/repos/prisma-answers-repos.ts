@@ -5,12 +5,12 @@ import { Injectable } from '@nestjs/common'
 
 import { PrismaService } from '../prisma-service'
 import { PrismaAnswerMapper } from '../mappers/prisma-answer-mapper'
-import { AnswerAttachmentRepos } from '@/domain/forum/application/repos/answer-attachment-repos'
+import { AnswerAttachmentsRepos } from '@/domain/forum/application/repos/answer-attachment-repos'
 @Injectable()
 export class PrismaAnswersRepos implements AnswersRepos {
   constructor(
     private prisma: PrismaService,
-    private answerAttachmentRepos: AnswerAttachmentRepos,
+    private answerAttachmentsRepos: AnswerAttachmentsRepos,
   ) {}
 
   async findByQuestionId(
@@ -65,9 +65,9 @@ export class PrismaAnswersRepos implements AnswersRepos {
         },
         data,
       }),
-      this.answerAttachmentRepos.createMany(answer.attachments.getNewItems()),
+      this.answerAttachmentsRepos.createMany(answer.attachments.getNewItems()),
 
-      this.answerAttachmentRepos.deleteMany(
+      this.answerAttachmentsRepos.deleteMany(
         answer.attachments.getRemovedItems(),
       ),
     ])

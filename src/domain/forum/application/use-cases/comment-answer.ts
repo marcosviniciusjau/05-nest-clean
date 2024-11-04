@@ -1,7 +1,7 @@
 import { AnswersRepos } from '../repos/answer-repos'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { AnswerComment } from '../../enterprise/entities/answer-comment'
-import { AnswerCommentsRepos } from '../repos/answer-comment-repos'
+import { AnswerCommentsRepos } from '../repos/answer-comments-repos'
 import { Either, left, right } from '@/core/either'
 import { NotFoundError } from '@/core/errors/errors/not-found-error'
 import { Injectable } from '@nestjs/common'

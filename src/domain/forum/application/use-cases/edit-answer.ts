@@ -6,7 +6,7 @@ import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { AnswerAttachment } from '../../enterprise/entities/answer-attachment'
 import { AnswerAttachmentList } from '../../enterprise/entities/answer-attachment-list'
-import { AnswerAttachmentRepos } from '../repos/answer-attachment-repos'
+import { AnswerAttachmentsRepos } from '../repos/answer-attachment-repos'
 import { Injectable } from '@nestjs/common'
 
 interface EditAnswerUseCaseRequest {
@@ -26,7 +26,7 @@ type EditAnswerUseCaseResponse = Either<
 export class EditAnswerUseCase {
   constructor(
     private answersRepos: AnswersRepos,
-    private answerAttachmentsRepos: AnswerAttachmentRepos,
+    private answerAttachmentsRepos: AnswerAttachmentsRepos,
   ) {}
 
   async execute({

@@ -8,7 +8,9 @@ import {
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 
 import { z } from 'zod'
+
 import { ListQuestionAnswersUseCase } from '@/domain/forum/application/use-cases/list-question-answers'
+import { CommentWithAuthorPresenter } from '../presenter/comment-with-author-presenter'
 const page = z
   .string()
   .optional()
@@ -19,24 +21,24 @@ const page = z
 const queryValidation = new ZodValidationPipe(page)
 type PageQuerySchema = z.infer<typeof page>
 
-@Controller('/questions/:questionId/answers')
+@Controller('/questions/:answerId/answers')
 export class ListQuestionAnswersController {
   constructor(private listQuestionsAnswers: ListQuestionAnswersUseCase) {}
   @Get()
   async handle(
     @Query('page', queryValidation) page: PageQuerySchema,
-    @Param('questionId') questionId: string,
+    @Param('answerId') answerId: string,
   ) {
     const result = await this.listQuestionsAnswers.execute({
       page,
-      questionId,
+      answerId,
     })
 
     if (result.isLeft()) {
       throw new BadRequestException()
     }
 
-    const answers = result.value.answers
-    return { answers }
+    const comments = result.value.comments
+    return { comments: comments.map(CommentWithAuthorPresenter.toHttp) }
   }
 }

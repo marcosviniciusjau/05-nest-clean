@@ -1,6 +1,6 @@
 import { Either, right } from '@/core/either'
 import { AnswerComment } from '../../enterprise/entities/answer-comment'
-import { AnswerCommentsRepos } from '../repos/answer-comment-repos'
+import { AnswerCommentsRepos } from '../repos/answer-comments-repos'
 import { Injectable } from '@nestjs/common'
 interface ListAnswerCommentsUseCaseRequest {
   answerId: string

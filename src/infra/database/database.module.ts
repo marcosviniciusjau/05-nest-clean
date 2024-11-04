@@ -4,16 +4,18 @@ import { PrismaQuestionsRepos } from './prisma/repos/prisma-questions-repos'
 import { PrismaQuestionCommentsRepos } from './prisma/repos/prisma-question-comments'
 import { PrismaQuestionAttachmentsRepos } from './prisma/repos/prisma-question-attachments'
 import { PrismaAnswerCommentsRepos } from './prisma/repos/prisma-answer-comments-repos'
-import { PrismaAnswerAttachmentRepos } from './prisma/repos/prisma-answer-attachments-repos'
+import { PrismaAnswerAttachmentsRepos } from './prisma/repos/prisma-answer-attachments-repos'
 import { QuestionsRepos } from '@/domain/forum/application/repos/question-repos'
 import { StudentRepos } from '@/domain/forum/application/repos/student-repos'
 import { PrismaStudentRepos } from './prisma/repos/prisma-student-repos'
-import { QuestionCommentsRepos } from '@/domain/forum/application/repos/question-comment-repos'
+import { QuestionCommentsRepos } from '@/domain/forum/application/repos/question-comments-repos'
 import { QuestionAttachmentsRepos } from '@/domain/forum/application/repos/question-attachments-repos'
-import { AnswerCommentsRepos } from '@/domain/forum/application/repos/answer-comment-repos'
-import { AnswerAttachmentRepos } from '@/domain/forum/application/repos/answer-attachment-repos'
+import { AnswerCommentsRepos } from '@/domain/forum/application/repos/answer-comments-repos'
+import { AnswerAttachmentsRepos } from '@/domain/forum/application/repos/answer-attachment-repos'
 import { AnswersRepos } from '@/domain/forum/application/repos/answer-repos'
 import { PrismaAnswersRepos } from './prisma/repos/prisma-answers-repos'
+import { AttachmentsRepos } from '@/domain/forum/application/repos/attachments-repos'
+import { PrismaAttachmentsRepos } from './prisma/repos/prisma-attachment-repos'
 
 @Module({
   providers: [
@@ -47,8 +49,12 @@ import { PrismaAnswersRepos } from './prisma/repos/prisma-answers-repos'
       useClass: PrismaAnswerCommentsRepos,
     },
     {
-      provide: AnswerAttachmentRepos,
-      useClass: PrismaAnswerAttachmentRepos,
+      provide: AnswerAttachmentsRepos,
+      useClass: PrismaAnswerAttachmentsRepos,
+    },
+    {
+      provide: AttachmentsRepos,
+      useClass: PrismaAttachmentsRepos,
     },
   ],
   exports: [
@@ -59,7 +65,8 @@ import { PrismaAnswersRepos } from './prisma/repos/prisma-answers-repos'
     QuestionCommentsRepos,
     QuestionAttachmentsRepos,
     AnswerCommentsRepos,
-    AnswerAttachmentRepos,
+    AnswerAttachmentsRepos,
+    AttachmentsRepos,
   ],
 })
 export class DatabaseModule {}
