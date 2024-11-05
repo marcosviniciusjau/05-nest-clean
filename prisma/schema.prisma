@@ -19,9 +19,10 @@ model User {
   password String
   role     UserRole @default(STUDENT)
 
-  questions Question[]
-  answers   Answer[]
-  comments   Comment[]
+  questions     Question[]
+  answers       Answer[]
+  comments      Comment[]
+  notifications Notifications[]
 
   @@map("users")
 }
@@ -36,9 +37,9 @@ model Question {
   authorId     String    @map("author_id")
   bestAnswerId String?   @unique @map("best_answer_id")
 
-  author     User         @relation(fields: [authorId], references: [id])
-  bestAnswer Answer?      @relation("bestAnswer", fields: [bestAnswerId], references: [id])
-  answers    Answer[]
+  author      User         @relation(fields: [authorId], references: [id])
+  bestAnswer  Answer?      @relation("bestAnswer", fields: [bestAnswerId], references: [id])
+  answers     Answer[]
   comments    Comment[]
   attachments Attachment[]
 
@@ -56,8 +57,8 @@ model Answer {
   author       User         @relation(fields: [authorId], references: [id])
   bestAnswerOn Question?    @relation("bestAnswer")
   question     Question     @relation(fields: [questionId], references: [id])
-  comments      Comment[]
-  attachments   Attachment[]
+  comments     Comment[]
+  attachments  Attachment[]
 
   @@map("answers")
 }
@@ -87,4 +88,17 @@ model Attachment {
   answer     Answer?   @relation(fields: [answerId], references: [id])
 
   @@map("attachments")
+}
+
+model Notifications {
+  id          String    @id @default(uuid())
+  recipientId String    @map("recepient_id")
+  title       String
+  content     String
+  readAt      DateTime? @map("read_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  recepient User @relation(fields: [recipientId], references: [id])
+
+  @@map("notifications")
 }

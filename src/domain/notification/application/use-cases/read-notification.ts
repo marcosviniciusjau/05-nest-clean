@@ -1,6 +1,6 @@
 import { Either, left, right } from '@/core/either'
 import { Notification } from '../../enterprise/entities/notification'
-import { NotificationRepos } from '../repos/notification-repos'
+import { NotificationsRepos } from '../repos/notifications-repos'
 import { NotFoundError } from '@/core/errors/errors/not-found-error'
 import { NotAllowedError } from '@/core/errors/errors/not-allowed-error'
 
@@ -17,7 +17,7 @@ type ReadNotificationUseCaseResponse = Either<
 >
 
 export class ReadNotificationUseCase {
-  constructor(private notificationsRepos: NotificationRepos) {}
+  constructor(private notificationsRepos: NotificationsRepos) {}
   async execute({
     notificationId,
     recipientId,

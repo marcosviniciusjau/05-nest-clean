@@ -7,6 +7,7 @@ import { PaginationParams } from '@/core/repos/pagination-params'
 import { QuestionAttachmentsRepos } from '@/domain/forum/application/repos/question-attachments-repos'
 import { QuestionDetails } from '@/domain/forum/enterprise/entities/value-objects/question-details'
 import { PrismaQuestionDetailsMapper } from '../mappers/prisma-question-details-mapper'
+import { DomainEvents } from '@/core/events/domain-events'
 
 @Injectable()
 export class PrismaQuestionsRepos implements QuestionsRepos {
@@ -73,6 +74,8 @@ export class PrismaQuestionsRepos implements QuestionsRepos {
     await this.questionAttachmentsRepos.createMany(
       question.attachments.getNewItems(),
     )
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
 
   async save(question: Question): Promise<void> {
@@ -94,6 +97,8 @@ export class PrismaQuestionsRepos implements QuestionsRepos {
         question.attachments.getRemovedItems(),
       ),
     ])
+
+    DomainEvents.dispatchEventsForAggregate(question.id)
   }
 
   async delete(question: Question): Promise<void> {

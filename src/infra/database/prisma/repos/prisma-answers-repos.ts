@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../prisma-service'
 import { PrismaAnswerMapper } from '../mappers/prisma-answer-mapper'
 import { AnswerAttachmentsRepos } from '@/domain/forum/application/repos/answer-attachment-repos'
+import { DomainEvents } from '@/core/events/domain-events'
 @Injectable()
 export class PrismaAnswersRepos implements AnswersRepos {
   constructor(
@@ -45,6 +46,8 @@ export class PrismaAnswersRepos implements AnswersRepos {
     await this.prisma.answer.create({
       data,
     })
+
+    DomainEvents.dispatchEventsForAggregate(answer.id)
   }
 
   async delete(answer: Answer): Promise<void> {
@@ -71,5 +74,7 @@ export class PrismaAnswersRepos implements AnswersRepos {
         answer.attachments.getRemovedItems(),
       ),
     ])
+
+    DomainEvents.dispatchEventsForAggregate(answer.id)
   }
 }
